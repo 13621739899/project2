@@ -512,7 +512,7 @@ data$pay &lt;- factor(data$pay, levels = c(&quot;$0 &quot;, &quot;$0-5&quot;, &q
 
 data$age &lt;- factor(data$age, levels = sort(unique(data$age)), ordered = TRUE)
 
-# Plot
+
 ggplot(data, aes(x=pay, fill=age)) + 
   geom_bar() +
   ggtitle(&quot;the relationship between the monthly expenditure on media platform subscriptions and 
