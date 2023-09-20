@@ -1,0 +1,147 @@
+---
+title: "Project 2 - Exploring the ability to distinguish between authentic and fake news"
+date: "2023-09-16"
+output:
+  html_document:
+    code_folding: hide 
+---
+
+###### Data Analysis by: Yasmeen Ahmad, Genie Chu, Joan Jose, Starry Li, Xue Tianyue Xue and Mengdan Zhang
+
+## The Structure of the Dataset
+
+```{r}
+data <- read.csv("Project2.csv") 
+str(data)
+library(ggplot2)
+library(tidyverse)
+
+
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r cars}
+#install.packages("tidyverse")
+suppressPackageStartupMessages(library(tidyverse))
+```
+
+### RQ1: How does screen time affect an individual's ability to navigate through fake news? (175 words)
+
+```{r}
+data <- read.csv("Project2.csv") 
+plot <- ggplot(data, aes(x = time, y = confidence_in_distinguish)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE, color = "blue") +
+  theme_minimal() +
+  labs(x = "Screen Time (hrs)", y = "Confidence ratings  (1 to 5)", title = " The Relationship between Screen Time and Confidence ratings ")
+print(plot)
+```
+
+```{r}
+data <- read.csv("Project2.csv")
+
+```
+
+```{r}
+ggplot(data, aes(x = social_media)) + 
+  geom_bar() +
+  labs(title = "Most preferable choice of Social Media Platform", x = "Different Platform Types (categorical)", y = "Count (numerical frequency)") +
+  theme_minimal()
+```
+
+limitation --\> missing out possible other forms of media that respondents may have chosen? the others column very vague and doesn't contribute in drawing conclusions about individual's preferences in regards to social media.
+
+# RQ2: "What is the relationship, if any, between the monthly expenditure on media platform subscriptions and the age of individuals?"
+
+```{r}
+
+library(tidyverse)
+
+data <- read.csv("Project2.csv")
+
+data$pay <- factor(data$pay, levels = c("$0 ", "$0-5", "$5-10", "$10-15", "$15-20", "$25+"), ordered = TRUE)
+
+data$age <- factor(data$age, levels = sort(unique(data$age)), ordered = TRUE)
+
+# Plot
+ggplot(data, aes(x=pay, fill=age)) + 
+  geom_bar() +
+  ggtitle("the relationship between the monthly expenditure on media platform subscriptions and 
+          different ranges of people(16-32)") +
+  xlab("Monthly Expenditure on media platform subscriptions(dollar)") +
+  ylab("number of people with range of ages") +
+  labs(fill="Age") +
+  scale_y_continuous(breaks = seq(0, max(table(data$pay)), by = 1)) + 
+  theme_minimal() +
+  theme(panel.grid.major = element_line(colour = "darkgray"), 
+        panel.grid.minor = element_line(colour = "darkgray"))
+
+```
+
+
+
+
+
+
+
+## From the diagram, we can see that younger people have a wide range of spending on media subscriptions, with a noticeable trend towards lower costs. On the other hand, older age groups seem to have a more stable spending behavior. However, the chart might miss some extreme cases or not represent all age groups, so looking into more detailed data might give a clearer picture.
+
+```{r}
+data <- read.csv("Project2.csv")
+library(dplyr)
+
+results <- data %>%
+  group_by(pay) %>%
+  summarise(
+    mean_age = mean(age),
+    median_age = median(age)
+  )
+
+print(results)
+
+
+```
+
+
+
+## From the table of mean and median above,we conclude that the $25+ category has the highest mean and median age, suggesting the oldest group spends the most, while those spending $0 average around 19 years.
+
+
+
+
+
+
+
+
+
+```{r}
+ggplot(data, aes(x = critically_analyze)) + 
+  geom_bar() +
+  labs(title = "Relatonship between purchasing subscription for a media platform and 
+  ability to  critically analyze(1 to 5 increasingly)
+", x = "subjective critically analyze ratings (1 to 5)", y = "Count") +
+  theme_minimal()
+```
+
+```{r}
+ggplot(data, aes(x = verify_the_accuracy, fill = verify_the_accuracy)) + 
+  geom_bar() +
+  labs(title = "Do you verify the accuracy of news?", x = "Response", y = "Count",) +
+  theme_minimal()+
+  scale_fill_manual(values = c("Frequently" = "red", "Occasionally" = "orange", "Always" = "green", "Never" = "blue"))
+```
+
+```{r}
+ggplot(data, aes(x = confident_in_information )) + 
+  geom_bar() +
+  labs(title = "An Individual's confidence in their ability to critically analyse the information ?", x = "Confidence level", y = "Count") +
+  theme_minimal()
+
+```
+
+limitation: social desirability bias --\> respondents' desire to answer a question in a way they believe is morally or socially acceptable. in this survey, no one has really put down 1 in their ability to critically analyse the information presented
+
+another limitation --\> wording of the survey question --\> very broad and can have two meanings associated with it.E.g. maybe scrutinizing the veracity of claims, or reading through it carefully/slowly, etc. Different respondents might approach the question differently
